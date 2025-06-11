@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ku">
+<head>
+  <meta charset="UTF-8">
+  <title>داشبۆردی وەسڵ و راپۆرت</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container mt-5">
+    <h2 class="mb-4 text-center">📋 داشبۆردی وەسڵ و راپۆرت</h2>
+
+    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="receipts-tab" data-bs-toggle="tab" data-bs-target="#receipts" type="button" role="tab">📑 وەسڵەکان</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button" role="tab">📊 راپۆرتەکان</button>
+      </li>
+    </ul>
+
+    <div class="tab-content mt-4" id="dashboardContent">
+      <!-- وەسڵەکان -->
+      <div class="tab-pane fade show active" id="receipts" role="tabpanel">
+        <form id="receiptForm" class="row g-3 mb-3">
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="ناوی کڕیار" id="customerName" required>
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="ناوی بەرهەم" id="productName" required>
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control" placeholder="بڕ" id="quantity" required>
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control" placeholder="نرخی یەکە" id="unitPrice" required>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">زیادکردنی وەسڵ</button>
+          </div>
+        </form>
+
+        <table class="table table-bordered table-striped" id="receiptTable">
+          <thead class="table-dark">
+            <tr>
+              <th>ناوی کڕیار</th>
+              <th>بەرهەم</th>
+              <th>بڕ</th>
+              <th>نرخی یەکە</th>
+              <th>کۆی گشتی</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- راپۆرتەکان -->
+      <div class="tab-pane fade" id="reports" role="tabpanel">
+        <div class="card">
+          <div class="card-body">
+            <h5>کۆی وەسڵەکان: <span id="totalReceipts">0</span></h5>
+            <h5>کۆی گشتی فرۆشتن: <span id="totalAmount">0</span> دینار</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script Logic -->
+  <script>
+    const receiptForm = document.getElementById("receiptForm");
+    const receiptTableBody = document.querySelector("#receiptTable tbody");
+    const totalReceipts = document.getElementById("totalReceipts");
+    const totalAmount = document.getElementById("totalAmount");
+
+    let receiptCount = 0;
+    let amountTotal = 0;
+
+    receiptForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const customer = document.getElementById("customerName").value;
+      const product = document.getElementById("productName").value;
+      const quantity = parseFloat(document.getElementById("quantity").value);
+      const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+      const total = quantity * unitPrice;
+
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${customer}</td>
+        <td>${product}</td>
+        <td>${quantity}</td>
+        <td>${unitPrice}</td>
+        <td>${total}</td>
+      `;
+      receiptTableBody.appendChild(newRow);
+
+      receiptCount++;
+      amountTotal += total;
+
+      totalReceipts.textContent = receiptCount;
+      totalAmount.textContent = amountTotal.toFixed(2);
+
+      receiptForm.reset();
+    });
+  </script>
+</body>
+</html>
